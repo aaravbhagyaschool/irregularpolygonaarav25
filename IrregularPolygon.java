@@ -28,7 +28,7 @@ public class IrregularPolygon
         return perimeter;
     }
 
-//shoelace formula below
+//shoelace formula (look on google classroom)
 public double area() 
 {
     if (myPolygon.size() < 3) return 0.0;
@@ -42,9 +42,19 @@ public double area()
     return Math.abs(sum) / 2.0;
 }
 
-    public void draw() 
+public void draw() //USE GETTERS
+{
+    DrawingTool pen = new DrawingTool(new SketchPad(500, 500));
+    pen.up();
+    if (!myPolygon.isEmpty()) //NOTE aarav check if polygon is empty (use !)
     {
-
+        pen.move(myPolygon.get(0).x, myPolygon.get(0).y);
+        pen.down();
+        for (Point2D.Double point : myPolygon) 
+        {
+            pen.move(point.x, point.y);
+        }
+        pen.move(myPolygon.get(0).x, myPolygon.get(0).y);
     }
 }
 
