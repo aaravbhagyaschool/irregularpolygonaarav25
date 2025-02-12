@@ -57,4 +57,5 @@ public void draw() //USE GETTERS
         pen.move(myPolygon.get(0).x, myPolygon.get(0).y);
     }
 }
+}
 
