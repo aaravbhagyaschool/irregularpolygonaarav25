@@ -1,61 +1,60 @@
-import java.awt.geom.*; 
+import java.awt.geom.*;
 import java.util.ArrayList;
 
 import gpdraw.*;
 
 public class IrregularPolygon 
 {
-    private ArrayList<Point2D.Double> myPolygon;
+    private ArrayList<Point2D.Double> vertices;
 
     public IrregularPolygon() 
     {
-        myPolygon = new ArrayList<>();
+        vertices = new ArrayList<>();
     }
 
-    public void add(Point2D.Double point) 
+    public void add(Point2D.Double newPoint) 
     {
-        myPolygon.add(point);
+        vertices.add(newPoint);
+    }
+
+    // shoelace formula (look on google classroom)
+    public double area() 
+    {
+        if (vertices.size() < 3) return 0.0;
+        double total = 0.0;
+        for (int i = 0; i < vertices.size(); i++) 
+        {
+            Point2D.Double currentVertex = vertices.get(i);
+            Point2D.Double nextVertex = vertices.get((i + 1) % vertices.size());
+            total += (currentVertex.getX() * nextVertex.getY()) - (currentVertex.getY() * nextVertex.getX());
+        }
+        return Math.abs(total) / 2.0;
     }
 
     public double perimeter() 
     {
-        if (myPolygon.size() < 2) return 0.0;
-        double perimeter = 0.0;
-        for (int i = 0; i < myPolygon.size(); i++) 
+        if (vertices.size() < 2) return 0.0;
+        double totalPerimeter = 0.0;
+        for (int i = 0; i < vertices.size(); i++) 
         {
-            perimeter += myPolygon.get(i).distance(myPolygon.get((i + 1) % myPolygon.size()));
+            totalPerimeter += vertices.get(i).distance(vertices.get((i + 1) % vertices.size()));
         }
-        return perimeter;
+        return totalPerimeter;
     }
 
-//shoelace formula (look on google classroom)
-public double area() 
-{
-    if (myPolygon.size() < 3) return 0.0;
-    double sum = 0.0;
-    for (int i = 0; i < myPolygon.size(); i++) 
+    public void draw() // USE GETTERS
     {
-        Point2D.Double current = myPolygon.get(i);
-        Point2D.Double next = myPolygon.get((i + 1) % myPolygon.size());
-        sum += (current.x * next.y) - (current.y * next.x);
-    }
-    return Math.abs(sum) / 2.0;
-}
-
-public void draw() //USE GETTERS
-{
-    DrawingTool pen = new DrawingTool(new SketchPad(500, 500));
-    pen.up();
-    if (!myPolygon.isEmpty()) //NOTE aarav check if polygon is empty (use !)
-    {
-        pen.move(myPolygon.get(0).x, myPolygon.get(0).y);
-        pen.down();
-        for (Point2D.Double point : myPolygon) 
+        DrawingTool pen = new DrawingTool(new SketchPad(500, 500));
+        pen.up();
+        if (!vertices.isEmpty()) // NOTE aarav check if polygon is empty (use !)
         {
-            pen.move(point.x, point.y);
+            pen.move(vertices.get(0).getX(), vertices.get(0).getY());
+            pen.down();
+            for (Point2D.Double vertex : vertices) 
+            {
+                pen.move(vertex.getX(), vertex.getY());
+            }
+            pen.move(vertices.get(0).getX(), vertices.get(0).getY());
         }
-        pen.move(myPolygon.get(0).x, myPolygon.get(0).y);
     }
 }
-}
-
